@@ -3,16 +3,18 @@
 import colorsys
 import math
 
+import geomstats.backend as gs
 import matplotlib.pyplot as plt
 import numpy as np
 from geomstats.geometry.spd_matrices import SPDAffineMetric, SPDMatrices
 from matplotlib.tri import Triangulation
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d import Axes3D  # NOQA
-import geomstats.backend as gs
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
 
 class Ellipses:
     """Class used to plot points on the manifold SPD(2).
+
     Elements S of the manifold of 2D Symmetric Positive Definite matrices
     can be conveniently represented by ellipses.
     We write :math:`S = O D O^T` with :math:`O` an orthogonal matrix (rotation)
@@ -20,6 +22,7 @@ class Ellipses:
     :math:`D`, are the inverse of the length of the major and minor axes of
     the ellipse. The rotation matrix :math:`O` determines the orientation of the
     2D ellipse in the 2D plane.
+
     Parameters
     ----------
     k_sampling_points : int
@@ -32,10 +35,12 @@ class Ellipses:
     @staticmethod
     def set_ax(ax=None):
         """Set the axis for the Figure.
+
         Parameters
         ----------
         ax : Axis
             Axis of the figure.
+
         Returns
         -------
         ax : Axis
@@ -48,6 +53,7 @@ class Ellipses:
 
     def draw_points(self, points=None, ax=None, **plot_kwargs):
         """Draw the ellipses.
+
         Parameters
         ----------
         ax : Axis
@@ -69,10 +75,12 @@ class Ellipses:
 
     def compute_coordinates(self, point):
         """Compute the ellipse coordinates of a 2D SPD matrix.
+
         Parameters
         ----------
         point : array-like, shape=[2, 2]
             SPD matrix.
+
         Returns
         -------
         x_coords : array-like, shape=[k_sampling_points,]
@@ -94,6 +102,7 @@ class Ellipses:
         y_coords = eigvalue1 * gs.cos(thetas) * rot_sin
         y_coords += rot_cos * eigvalue2 * gs.sin(thetas)
         return x_coords, y_coords
+
 
 class SPDMatricesViz:
     """Class for the visualization of the manifold for SPD matrices.
@@ -146,12 +155,12 @@ class SPDMatricesViz:
 
     def cuboid_data(self, pos, size=(1, 1, 1)):
         """Generate cuboid data for plotting.
-        
+
         Parameters
         ----------
-        pos : tuple
+        pos : tuple of size 3
             Position coordinates in Eucldiean space
-        size : tuple
+        size : tuple of size 3
             Size of cube in each dimension
 
         Returns
@@ -277,8 +286,7 @@ class SPDMatricesViz:
             ]
         )
 
-        triangle_vertices = np.concatenate(
-            [triangle_vertices, triangle_vertices2])
+        triangle_vertices = np.concatenate([triangle_vertices, triangle_vertices2])
         midpoints = np.average(triangle_vertices, axis=1)
 
         if hsv:
@@ -414,19 +422,13 @@ class SPDMatricesViz:
             Figure plot
         """
         self.plot_geodesic(
-            startpt_xyz=(0, 0, 0.5),
-            endpt_xyz=(0, 0, 0.6),
-            n_geodesic_samples=30
+            startpt_xyz=(0, 0, 0.5), endpt_xyz=(0, 0, 0.6), n_geodesic_samples=30
         )
         self.plot_geodesic(
-            startpt_xyz=(0, 0, 0.5),
-            endpt_xyz=(0, 0.1, 0.5),
-            n_geodesic_samples=30
+            startpt_xyz=(0, 0, 0.5), endpt_xyz=(0, 0.1, 0.5), n_geodesic_samples=30
         )
         self.plot_geodesic(
-            startpt_xyz=(0, 0, 0.5),
-            endpt_xyz=(0.1, 0, 0.5),
-            n_geodesic_samples=30
+            startpt_xyz=(0, 0, 0.5), endpt_xyz=(0.1, 0, 0.5), n_geodesic_samples=30
         )
 
     def plot_rendering_top(self, n_radii, n_angles):
@@ -443,7 +445,6 @@ class SPDMatricesViz:
         -------
         Figure plot
         """
-
         z_plane = self.curr_z
         radii = np.linspace(z_plane, 0, n_radii, endpoint=False)
         angles = np.linspace(0, 2 * np.pi, n_angles, endpoint=False)
@@ -455,8 +456,7 @@ class SPDMatricesViz:
         for x_tmp, y_tmp in zip(x, y):
             sampled_xyz = (x_tmp, y_tmp, z_plane)
             sampled_spd = self.xyz_to_spd(sampled_xyz)
-            ellipse_x, ellipse_y = self.spd_point_viz.compute_coordinates(
-                sampled_spd)
+            ellipse_x, ellipse_y = self.spd_point_viz.compute_coordinates(sampled_spd)
             self.ax.plot(
                 ellipse_x / (n_radii * n_angles * 0.25) + sampled_xyz[0],
                 ellipse_y / (n_radii * n_angles * 0.25) + sampled_xyz[1],
@@ -539,9 +539,7 @@ class SPDMatricesViz:
         ax.set_zlabel("Z")
         return fig
 
-    def plot_exp(self,
-                 startpt_xyz=(0, 0, 1),
-                 tangentVectorXYZ=(0.5, 0.5, -0.25)):
+    def plot_exp(self, startpt_xyz=(0, 0, 1), tangentVectorXYZ=(0.5, 0.5, -0.25)):
         """Plot exponential map of the manifold.
 
         Parameters
@@ -555,8 +553,7 @@ class SPDMatricesViz:
         -------
         Figure plot
         """
-        tangent_matrix = self.xyz_to_spd(
-            tangentVectorXYZ)
+        tangent_matrix = self.xyz_to_spd(tangentVectorXYZ)
 
         print("Tangent Matrix")
         print(tangent_matrix)
@@ -611,8 +608,7 @@ class SPDMatricesViz:
         self.ax.scatter3D(
             startpt_xyz[0], startpt_xyz[1], startpt_xyz[2], label="Start Point"
         )
-        self.ax.scatter3D(
-            endpt_xyz[0], endpt_xyz[1], endpt_xyz[2], label="End Point")
+        self.ax.scatter3D(endpt_xyz[0], endpt_xyz[1], endpt_xyz[2], label="End Point")
         self.ax.quiver(
             startpt_xyz[0],
             startpt_xyz[1],
@@ -656,16 +652,9 @@ class SPDMatricesViz:
         tangent_vector = self.spd_to_xyz(tangent_matrix)
 
         self.ax.scatter3D(
-            startpt_xyz[0],
-            startpt_xyz[1],
-            startpt_xyz[2],
-            label="Start Point"
+            startpt_xyz[0], startpt_xyz[1], startpt_xyz[2], label="Start Point"
         )
-        self.ax.scatter3D(
-            endpt_xyz[0],
-            endpt_xyz[1],
-            endpt_xyz[2],
-            label="End Point")
+        self.ax.scatter3D(endpt_xyz[0], endpt_xyz[1], endpt_xyz[2], label="End Point")
         self.ax.quiver(
             startpt_xyz[0],
             startpt_xyz[1],
@@ -681,15 +670,13 @@ class SPDMatricesViz:
             initial_point=self.xyz_to_spd(startpt_xyz),
         )
 
-        points_on_geodesic_spd = result(
-            np.linspace(0.0, 1.0, n_geodesic_samples))
+        points_on_geodesic_spd = result(np.linspace(0.0, 1.0, n_geodesic_samples))
 
         geodesicXYZ = np.zeros((n_geodesic_samples, 3))
         pointColors = []
         for index, matrix in enumerate(points_on_geodesic_spd):
             geodesicXYZ[index, :] = self.spd_to_xyz(matrix)
-            pointColors.append(
-                self.find_color_for_point(geodesicXYZ[index, :]))
+            pointColors.append(self.find_color_for_point(geodesicXYZ[index, :]))
 
         self.ax.scatter3D(
             geodesicXYZ[1:-1, 0],

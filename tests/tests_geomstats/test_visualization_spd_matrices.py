@@ -5,6 +5,7 @@ import tests.conftest
 from geomstats.geometry.spd_matrices import SPDMatrices
 from geomstats.visualization import SPDMatricesViz
 
+
 class TestVisualizationSPDMatrices(tests.conftest.TestCase):
     """Test cases for symmetric_positive_definite.py."""
 
